@@ -1,0 +1,23 @@
+# Ignorar dependencias
+node_modules/
+back/node_modules/
+front/node_modules/
+
+# Builds de Electron
+dist/
+dist_electron/
+*.exe
+*.zip
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno
+.env
+*.log
+*.db
+
+# Carpetas de editores
+.vscode/
+.idea/

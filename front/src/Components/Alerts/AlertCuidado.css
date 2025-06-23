@@ -1,0 +1,63 @@
+.alert-cuidado-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1500;
+}
+
+.alert-cuidado-modal {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+}
+
+.alert-cuidado-icon {
+  font-size: 50px;
+  color: var(--eliminar);
+  margin-bottom: 10px;
+}
+
+.alert-cuidado-icon span {
+  font-weight: bold;
+  border: 2px solid var(--eliminar);
+  border-radius: 50%;
+  padding: 10px 40px;
+  display: inline-block;
+}
+
+.alert-cuidado-title {
+  font-size: 20px;
+  color: var(--eliminar);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.alert-cuidado-message {
+  font-size: 14px;
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+
+.alert-cuidado-btn {
+  background-color: var(--eliminar);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.alert-cuidado-btn:hover {
+  background-color: #ff8f00;
+}

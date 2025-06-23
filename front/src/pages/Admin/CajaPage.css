@@ -1,0 +1,138 @@
+/* Contenedor principal */
+div[style*="height: 30vh"] {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Filtros con estilo vidrio */
+div[style*="gap: 1px"] {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  border-radius: 30px;
+  padding: 1rem;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+  color: white;
+  flex-wrap: wrap;
+}
+
+/* Inputs y selects estilizados */
+input[type="date"],
+input[type="month"],
+select {
+  color: #e9e9e9;
+  border: 1px solid #ff0000;
+  padding: 0.5rem;
+  border-radius: 10px;
+  width: 200px;
+  font-weight: bold;
+}
+
+/* Etiquetas */
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Tabla dinámica (ajustá si tu DynamicTable permite clases) */
+.dynamic-table-container {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 20px;
+  padding: 1rem;
+  color: #fff;
+  overflow-y: auto;
+}
+
+/* Resumen de totales */
+div[style*="background: white"] {
+  background: rgb(0, 0, 0);
+  backdrop-filter: blur(4px);
+  color: #000000;
+  border-radius: 20px;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  div[style*="gap: 100px"] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  input[type="date"],
+  input[type="month"],
+  select {
+    width: 100%;
+  }
+}
+.totales-caja {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  color: white;
+  width: auto;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.total-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+
+.total-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.emoji {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.monto {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.monto.debe {
+  color: #ff4d4d;
+}
+
+.monto.haber {
+  color: #4dff4d;
+}
+
+.monto.saldo.positivo {
+  color: #4dd9ff;
+}
+
+.monto.saldo.negativo {
+  color: #ff3333;
+}

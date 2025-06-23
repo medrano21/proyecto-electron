@@ -1,0 +1,53 @@
+.estadisticas-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5rem;
+  padding: 5rem;
+
+}
+
+/* Tarjetas con efecto vidrio */
+.chart-card {
+  background: rgba(0, 0, 0, 0.719);
+  backdrop-filter: blur(10px);
+  border-radius: 40px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
+  padding: 2rem 1rem; /* AUMENTADO para evitar que se corte el texto */
+  color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 300px;
+  text-align: center;
+}
+
+.chart-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+}
+
+.chart-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #ff2e2e;
+  letter-spacing: 1px;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 100;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .estadisticas-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .chart-card {
+    width: 100%;
+    max-width: 95vw;
+  }
+}

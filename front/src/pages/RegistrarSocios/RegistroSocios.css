@@ -1,0 +1,17 @@
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.form-wrapper form {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  color: white;
+  height: 65vh;
+}

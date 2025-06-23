@@ -1,0 +1,40 @@
+{
+  "name": "electron-gym",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de gimnasio",
+  "author": "VITE SOFTWARE",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.vitesoftware.gym",
+    "productName": "PowerGYM",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "back/**/*",
+      "front/dist/**/*",
+      "icono.ico"
+    ],
+    "asar": false,
+    "win": {
+      "target": "portable",
+      "icon": "icono.ico"
+    }
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^26.0.12",
+    "electron-rebuild": "^3.2.9"
+  }
+}

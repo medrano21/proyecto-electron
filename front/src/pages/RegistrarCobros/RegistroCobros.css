@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: url("../../assets/vista-de-angulo-bajo-del-hombre-musculoso-irreconocible-preparandose-para-levantar-una-barra-en-un-club-de-salud.jpg")
+    no-repeat center center fixed;
+  background-size: cover;
+}
+
+button[type="submit"] {
+  background-color: #000000;
+  /* color: rgb(255, 255, 255); */
+  border: none;
+  padding: 12px 24px; /* un poco más largo */
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: -10px auto 0;
+}
+.btn-cerrar {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.btn-cerrar:hover {
+  background-color: #ff0019;
+  transform: scale(1.03);
+}

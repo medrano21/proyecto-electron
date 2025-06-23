@@ -1,0 +1,34 @@
+.custom-button {
+  background-color: hsla(0, 86%, 44%, 0);
+  color: rgb(255, 255, 255);
+  padding: 10px 20px;
+  border: 10;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #ff0404;
+}
+
+.custom-button:disabled {
+  background-color: rgb(255, 0, 0);
+  cursor: not-allowed;
+}
+.boton-menu {
+  font-size: 1rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff3c3c;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.boton-menu:hover {
+  background-color: #e82e2e;
+  transform: scale(1.05);
+}
