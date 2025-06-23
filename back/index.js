@@ -16,8 +16,6 @@ const estadisticasRoutes = require("./routes/estadisticas");
 const estadoSocios = require("./routes/sociosRoutes");
 const cajaRoutes = require("./routes/cajaRoutes");
 
-const EXPIRATION_DATE = new Date("2025-07-23");
-
 // Definí la basePath para archivos estáticos o base de datos
 const basePath =
   electronApp && electronApp.isPackaged
@@ -42,19 +40,4 @@ module.exports = (app) => {
   app.use("/api/estadisticas", estadisticasRoutes);
   app.use("/api/estado_socios", estadoSocios);
   app.use("/api/caja", cajaRoutes);
-
-  // Control expiración
-  app.use((req, res, next) => {
-    const now = new Date();
-    if (now > EXPIRATION_DATE) {
-      return res
-        .status(403)
-        .json({ message: "Versión expirada. Contacte al administrador." });
-    }
-    next();
-  });
-
-  // Si necesitás servir archivos estáticos del backend (como imágenes o PDFs) usá basePath
-  // Ejemplo:
-  // app.use('/static', express.static(path.join(basePath, 'public')));
 };

@@ -1,27 +1,62 @@
 const { app: electronApp, BrowserWindow } = require("electron");
+require("dotenv").config();
+
 const path = require("path");
 const express = require("express");
 const fs = require("fs");
+const os = require("os");
+const nodemailer = require("nodemailer");
 
-// Ruta real de la base de datos dentro de tu proyecto
-const databaseFile = path.join(__dirname, "database", "db_powergym.sqlite");
-
-// Carpeta donde guardarás los backups en el escritorio
-const backupDir = path.join(
-  "C:",
-  "Users",
-  "USER",
-  "OneDrive",
-  "Escritorio",
-  "backups"
+// 🔹 Ruta a la base de datos
+const databaseFile = path.join(
+  __dirname,
+  "back",
+  "database",
+  "db_powergym.sqlite"
 );
 
-// Crear carpeta backup si no existe
+// 🔹 Carpeta de backups en el escritorio del usuario
+const backupDir = path.join(os.homedir(), "Desktop", "backups");
+
+// Crear carpeta si no existe
 if (!fs.existsSync(backupDir)) {
   fs.mkdirSync(backupDir, { recursive: true });
 }
 
-function backupDatabase() {
+function enviarBackupPorEmail(backupFilePath, done) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_DEST,
+    subject: "📦 Backup PowerGym",
+    text: "Adjunto el backup automático de la base de datos.",
+    attachments: [
+      {
+        filename: path.basename(backupFilePath),
+        path: backupFilePath,
+      },
+    ],
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("❌ Error al enviar backup:", error);
+    } else {
+      console.log("✅ Backup enviado por email:", info.response);
+    }
+    done?.(); // finalizar proceso
+  });
+}
+
+// 🔹 Función de backup
+function backupDatabase(done) {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const backupFile = path.join(
     backupDir,
@@ -30,9 +65,12 @@ function backupDatabase() {
 
   fs.copyFile(databaseFile, backupFile, (err) => {
     if (err) {
-      console.error("Error haciendo backup:", err);
+      console.error("❌ Error al crear backup:", err);
+      done?.(); // cerramos igual
     } else {
-      console.log("Backup de base de datos creado:", backupFile);
+      console.log("✅ Backup creado:", backupFile);
+
+      enviarBackupPorEmail(backupFile, done); // pasamos done al email
     }
   });
 }
@@ -80,8 +118,16 @@ electronApp.whenReady().then(() => {
   });
 });
 
-// Backup cuando la app se cierra
-electronApp.on("before-quit", () => {
-  console.log("App cerrándose, haciendo backup de base de datos...");
-  backupDatabase();
+let yaHizoBackup = false;
+
+electronApp.on("before-quit", (event) => {
+  if (yaHizoBackup) return;
+
+  event.preventDefault(); // cancela cierre por ahora
+  console.log("🛑 Cerrando app... haciendo backup y enviando por email.");
+
+  backupDatabase(() => {
+    yaHizoBackup = true;
+    electronApp.quit(); // solo una vez
+  });
 });
