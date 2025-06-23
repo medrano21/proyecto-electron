@@ -67,7 +67,7 @@ const registroSocio = async (req, res) => {
     console.error("❌ Error al registrar socio:", err);
 
     if (err.message.includes("UNIQUE constraint failed")) {
-      return res.status(400).json({
+      return res.status(200).json({
         success: false,
         error: "El documento ya está registrado",
       });

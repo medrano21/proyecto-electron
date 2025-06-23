@@ -44,9 +44,15 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
         } catch (err) {
             setError(err.message);
             setSocio(null);
+
+            // 👇 Reproducir sonido cuando no se encuentra el socio
+            const audio = new Audio("/sonidos/noencontrado.wav");
+            audioRef.current = audio;
+            audio.play().catch((error) =>
+                console.error("No se pudo reproducir el audio de no encontrado:", error)
+            );
         }
     };
-
 
 
 
