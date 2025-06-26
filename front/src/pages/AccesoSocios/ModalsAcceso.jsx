@@ -25,7 +25,7 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
                     handleBuscar(valorActual); // pasamos el valor directamente
                 }
 
-                setBusqueda(""); // limpiamos inmediatamente
+                setBusqueda("");
             }
         };
 
@@ -46,7 +46,7 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
             setSocio(null);
 
             // 👇 Reproducir sonido cuando no se encuentra el socio
-            const audio = new Audio("/sonidos/noencontrado.wav");
+            const audio = new Audio("sonidos/noencontrado.wav");
             audioRef.current = audio;
             audio.play().catch((error) =>
                 console.error("No se pudo reproducir el audio de no encontrado:", error)
@@ -59,17 +59,17 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
     const reproducirSonido = (estado, yaIngreso) => {
         let audio;
         if (yaIngreso) {
-            audio = new Audio("/sonidos/socioyaingresado.wav");
+            audio = new Audio("sonidos/socioyaingresado.wav");
         } else {
             switch (estado) {
                 case "Habilitado":
-                    audio = new Audio("/sonidos/habilitado.wav");
+                    audio = new Audio("sonidos/habilitado.wav");
                     break;
                 case "Habilitado con deuda":
-                    audio = new Audio("/sonidos/habilitadodeuda.wav");
+                    audio = new Audio("sonidos/habilitadodeuda.wav");
                     break;
                 case "Inhabilitado":
-                    audio = new Audio("/sonidos/sirena.wav");
+                    audio = new Audio("sonidos/sirena.wav");
                     break;
                 default:
                     break;
