@@ -1,30 +1,10 @@
 const db = require("../config/db");
-const util = require("util");
-
-const dbGet = util.promisify(db.get).bind(db);
-const dbAll = util.promisify(db.all).bind(db);
-const dbRun = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          lastID: this.lastID,
-          changes: this.changes,
-        });
-      }
-    });
-  });
-};
-
-// ---------- CAJA ----------
 
 async function getSaldoActual() {
-  const row = await dbGet(
+  const [rows] = await db.query(
     "SELECT saldo FROM caja ORDER BY id_caja DESC LIMIT 1"
   );
-  return row ? row.saldo : 0;
+  return rows.length > 0 ? rows[0].saldo : 0;
 }
 
 exports.insertarMovimiento = async (req, res) => {
@@ -40,7 +20,6 @@ exports.insertarMovimiento = async (req, res) => {
       haber,
     } = req.body;
 
-    // Si es tipo deuda, no insertamos en caja:
     if (tipo_movimiento === "DEUDA") {
       return res
         .status(400)
@@ -53,10 +32,10 @@ exports.insertarMovimiento = async (req, res) => {
     const sqlInsert = `
       INSERT INTO caja 
       (id_cobro, tipo_movimiento, detalle, socio_nombre, dni, fecha, hora, tipo_pago, debe, haber, saldo)
-      VALUES (?, ?, ?, ?, ?, date('now', 'localtime'), time('now', 'localtime'), ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?)
     `;
 
-    await dbRun(sqlInsert, [
+    await db.query(sqlInsert, [
       id_cobro || null,
       tipo_movimiento,
       detalle,
@@ -77,12 +56,11 @@ exports.insertarMovimiento = async (req, res) => {
 
 exports.obtenerMovimientos = async (req, res) => {
   try {
-    const rows = await dbAll(`
+    const [rows] = await db.query(`
       SELECT * FROM caja 
       WHERE tipo_movimiento = 'COBRO' OR tipo_movimiento = 'PAGO_DEUDA'
       ORDER BY fecha DESC, hora DESC
     `);
-
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: "Error al obtener movimientos" });

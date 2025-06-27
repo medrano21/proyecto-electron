@@ -1,16 +1,14 @@
-const path = require("path");
-const sqlite3 = require("sqlite3").verbose();
+const mysql = require("mysql2");
+require("dotenv").config();
 
-// Ruta al archivo de base de datos
-const dbPath = path.join(__dirname, "../database/db_powergym.sqlite");
-console.log("🧩 Ruta DB:", dbPath);
-
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error("❌ Error al conectar a SQLite:", err.message);
-  } else {
-    console.log("✅ Conectado a SQLite");
-  }
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-module.exports = db;
+module.exports = db.promise();

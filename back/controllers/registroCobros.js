@@ -1,27 +1,10 @@
-const db = require("../config/db"); // instancia sqlite3.Database
-const util = require("util");
+const db = require("../config/db");
 
-const dbGet = util.promisify(db.get).bind(db);
-const dbAll = util.promisify(db.all).bind(db);
-const dbRun = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          lastID: this.lastID,
-          changes: this.changes,
-        });
-      }
-    });
-  });
-};
-// REGISTRO COBROS
+// REGISTRO DE COBROS
 const obtenerRegistroCobros = async (req, res) => {
   const sql = `
     SELECT socios.id_socio, 
-           socios.Nombre || ' ' || socios.Apellido AS NombreCompleto,
+           CONCAT(socios.Nombre, ' ', socios.Apellido) AS NombreCompleto,
            socios.Documento,
            cobros.fecha_cobro AS FechaCobro,
            cobros.vencimiento AS Vencimiento,
@@ -36,12 +19,16 @@ const obtenerRegistroCobros = async (req, res) => {
   `;
 
   try {
-    const resultados = await dbAll(sql);
+    const [resultados] = await db.query(sql);
 
     const resultadosFormateados = resultados.map((row) => ({
       ...row,
-      FechaCobro: row.FechaCobro ? row.FechaCobro.split("T")[0] : null,
-      Vencimiento: row.Vencimiento ? row.Vencimiento.split("T")[0] : null,
+      FechaCobro: row.FechaCobro
+        ? row.FechaCobro.toISOString().split("T")[0]
+        : null,
+      Vencimiento: row.Vencimiento
+        ? row.Vencimiento.toISOString().split("T")[0]
+        : null,
     }));
 
     res.json(resultadosFormateados);
@@ -70,7 +57,8 @@ const registrarCobro = async (req, res) => {
   `;
 
   try {
-    const cobroResult = await dbRun(sqlCobro, [
+    // Registrar cobro
+    const [cobroResult] = await db.query(sqlCobro, [
       id_socio,
       fecha_cobro,
       vencimiento,
@@ -81,28 +69,33 @@ const registrarCobro = async (req, res) => {
       tipo_pago,
     ]);
 
-    const id_cobro = cobroResult.lastID;
+    const id_cobro = cobroResult.insertId;
 
-    const socio = await dbGet(
+    // Buscar socio
+    const [socioRows] = await db.query(
       "SELECT Nombre, Apellido, Documento FROM socios WHERE id_socio = ?",
       [id_socio]
     );
+
+    const socio = socioRows[0];
     const nombreCompleto = `${socio.Nombre} ${socio.Apellido}`;
     const documento = socio.Documento;
 
-    const lastSaldoResult = await dbGet(
+    // Obtener saldo anterior
+    const [lastSaldoRows] = await db.query(
       "SELECT saldo FROM caja ORDER BY id_caja DESC LIMIT 1"
     );
-    const ultimoSaldo = lastSaldoResult ? lastSaldoResult.saldo : 0;
+    const ultimoSaldo = lastSaldoRows[0]?.saldo || 0;
     const nuevoSaldo = ultimoSaldo + parseFloat(importe);
 
+    // Insertar en caja
     const insertCajaSQL = `
       INSERT INTO caja 
       (id_cobro, tipo_movimiento, detalle, socio_nombre, dni, fecha, hora, tipo_pago, debe, haber, saldo)
-      VALUES (?, 'COBRO', ?, ?, ?, date('now', 'localtime'), time('now', 'localtime'), ?, 0.00, ?, ?)
+      VALUES (?, 'COBRO', ?, ?, ?, CURDATE(), CURTIME(), ?, 0.00, ?, ?)
     `;
 
-    await dbRun(insertCajaSQL, [
+    await db.query(insertCajaSQL, [
       id_cobro,
       `Cobro del socio ${nombreCompleto}`,
       nombreCompleto,

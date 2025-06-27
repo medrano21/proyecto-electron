@@ -1,10 +1,5 @@
-const db = require("../config/db");
-const util = require("util");
+const db = require("../config/db"); // Esto importa db.promise()
 
-// Promisificamos los métodos para usar async/await
-const dbGet = util.promisify(db.get).bind(db);
-const dbAll = util.promisify(db.all).bind(db);
-const dbRun = util.promisify(db.run).bind(db);
 exports.login = async (req, res) => {
   const { usuario, pass } = req.body;
 
@@ -14,7 +9,7 @@ exports.login = async (req, res) => {
 
   try {
     const query = "SELECT * FROM roles WHERE usuario = ? AND pass = ?";
-    const results = await dbAll(query, [usuario, pass]);
+    const [results] = await db.query(query, [usuario, pass]);
 
     if (results.length > 0) {
       return res.status(200).json({ message: "Login exitoso" });

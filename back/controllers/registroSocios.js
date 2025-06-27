@@ -1,28 +1,9 @@
-const db = require("../config/db"); // instancia sqlite3.Database
-const util = require("util");
+const db = require("../config/db"); // conexión mysql2 con .promise()
 
-const dbGet = util.promisify(db.get).bind(db);
-const dbAll = util.promisify(db.all).bind(db);
-const dbRun = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          lastID: this.lastID,
-          changes: this.changes,
-        });
-      }
-    });
-  });
-};
-
-// SOCIOS
 const registroSocio = async (req, res) => {
   const datos = req.body;
 
-  if (!datos.Documento || !datos.Apellido || !datos.Nombre) {
+  if (!datos.Documento || !datos.Apellido || !datos.Nombre || !datos.id_plan) {
     return res.status(400).json({
       success: false,
       error: "Documento, Apellido, Nombre e id_plan son obligatorios",
@@ -52,21 +33,21 @@ const registroSocio = async (req, res) => {
       datos.Alergia || null,
       datos.Medicacion || null,
       datos.id_plan,
-      1,
-      new Date().toISOString().split("T")[0],
+      1, // Habilitado
+      new Date().toISOString().split("T")[0], // FechaIngreso
     ];
 
-    const result = await dbRun(sql, values);
+    const [result] = await db.query(sql, values);
 
     res.status(200).json({
       success: true,
       message: "Socio registrado correctamente",
-      insertId: result.lastID,
+      insertId: result.insertId,
     });
   } catch (err) {
     console.error("❌ Error al registrar socio:", err);
 
-    if (err.message.includes("UNIQUE constraint failed")) {
+    if (err.code === "ER_DUP_ENTRY") {
       return res.status(200).json({
         success: false,
         error: "El documento ya está registrado",

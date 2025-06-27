@@ -1,26 +1,8 @@
-const db = require("../config/db"); // instancia sqlite3.Database
-const util = require("util");
-
-const dbGet = util.promisify(db.get).bind(db);
-const dbAll = util.promisify(db.all).bind(db);
-const dbRun = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          lastID: this.lastID,
-          changes: this.changes,
-        });
-      }
-    });
-  });
-};
+const db = require("../config/db"); // instancia de mysql2/promise
 
 const obtenerSocios = async (req, res) => {
   try {
-    const rows = await dbAll(`
+    const [rows] = await db.query(`
       SELECT 
         s.*, 
         p.Descripcion AS Plan 
@@ -35,11 +17,14 @@ const obtenerSocios = async (req, res) => {
     res.status(500).json({ mensaje: "Error al obtener los socios" });
   }
 };
+
 const eliminarSocio = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await dbRun("DELETE FROM socios WHERE id_socio = ?", [id]);
-    if (result.changes === 0) {
+    const [result] = await db.query("DELETE FROM socios WHERE id_socio = ?", [
+      id,
+    ]);
+    if (result.affectedRows === 0) {
       return res.status(404).json({ mensaje: "Socio no encontrado" });
     }
     res.json({ mensaje: "Socio eliminado correctamente" });
@@ -52,7 +37,7 @@ const eliminarSocio = async (req, res) => {
 const buscarSocios = async (req, res) => {
   const { termino } = req.query;
   try {
-    const rows = await dbAll(
+    const [rows] = await db.query(
       `SELECT * FROM socios WHERE Nombre LIKE ? OR Apellido LIKE ? OR Documento LIKE ?`,
       [`%${termino}%`, `%${termino}%`, `%${termino}%`]
     );
@@ -65,7 +50,7 @@ const buscarSocios = async (req, res) => {
 
 const getSociosPorSexo = async (req, res) => {
   try {
-    const result = await dbAll(`
+    const [result] = await db.query(`
       SELECT Sexo, COUNT(*) AS cantidad
       FROM socios
       GROUP BY Sexo
@@ -79,7 +64,7 @@ const getSociosPorSexo = async (req, res) => {
 
 const getSociosPorPlan = async (req, res) => {
   try {
-    const result = await dbAll(`
+    const [result] = await db.query(`
       SELECT p.Descripcion, COUNT(*) AS cantidad
       FROM socios s
       JOIN planes p ON s.id_plan = p.id_plan
@@ -94,9 +79,9 @@ const getSociosPorPlan = async (req, res) => {
 
 const getSociosPorMes = async (req, res) => {
   try {
-    const result = await dbAll(`
+    const [result] = await db.query(`
       SELECT 
-        strftime('%Y-%m', FechaIngreso) AS mes,
+        DATE_FORMAT(FechaIngreso, '%Y-%m') AS mes,
         COUNT(*) AS cantidad
       FROM socios
       GROUP BY mes
@@ -136,13 +121,14 @@ const getSociosByEstado = async (req, res) => {
   }
 
   try {
-    const rows = await dbAll(query);
+    const [rows] = await db.query(query);
     res.json(rows);
   } catch (error) {
     console.error("Error al obtener socios:", error);
     res.status(500).json({ error: "Error al obtener socios" });
   }
 };
+
 module.exports = {
   obtenerSocios,
   eliminarSocio,

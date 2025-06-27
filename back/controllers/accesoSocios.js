@@ -1,35 +1,17 @@
 const db = require("../config/db");
-const util = require("util");
-
-// Promisificamos los métodos para usar async/await
-const dbGet = util.promisify(db.get).bind(db);
-const dbAll = util.promisify(db.all).bind(db);
-const dbRun = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          lastID: this.lastID,
-          changes: this.changes,
-        });
-      }
-    });
-  });
-};
 
 const buscarSocio = async (req, res) => {
   const { documento } = req.body;
 
   try {
-    const sqlSocio = `
+    const [socios] = await db.query(
+      `
       SELECT s.Nombre, s.Apellido, p.Descripcion AS Plan,
              COALESCE(c.vencimiento, 'Sin cobro') AS vencimiento,
-             datetime('now', 'localtime') AS horaEntrada,
+             NOW() AS horaEntrada,
              CASE
                WHEN c.vencimiento IS NULL THEN 'Inhabilitado'
-               WHEN c.vencimiento < date('now', 'localtime') THEN 'Inhabilitado'
+               WHEN c.vencimiento < CURDATE() THEN 'Inhabilitado'
                WHEN COALESCE(d.total_deuda, 0) > 0 THEN 'Habilitado con deuda'
                ELSE 'Habilitado'
              END AS estado
@@ -41,32 +23,40 @@ const buscarSocio = async (req, res) => {
       LEFT JOIN (
           SELECT id_socio, SUM(monto) AS total_deuda FROM deudas GROUP BY id_socio
       ) d ON s.id_socio = d.id_socio
-      WHERE s.Documento = ?;
-    `;
+      WHERE s.Documento = ?
+    `,
+      [documento]
+    );
 
-    const socio = await dbGet(sqlSocio, [documento]);
+    const socio = socios[0];
 
     if (!socio) {
       return res.status(404).json({ mensaje: "Socio no encontrado" });
     }
 
-    // Contar accesos hoy con date('now','localtime')
-    const sqlAccesos = `
+    const [accesos] = await db.query(
+      `
       SELECT COUNT(*) AS conteo FROM accesos 
       WHERE Documento = ? 
-        AND date(HoraEntrada) = date('now', 'localtime')
-    `;
+        AND DATE(HoraEntrada) = CURDATE()
+    `,
+      [documento]
+    );
 
-    const accesos = await dbGet(sqlAccesos, [documento]);
-    const yaIngreso = accesos.conteo > 0;
+    const yaIngreso = accesos[0].conteo > 0;
 
     if (
       (socio.estado === "Habilitado" ||
         socio.estado === "Habilitado con deuda") &&
       !yaIngreso
     ) {
-      const sqlInsert = `INSERT INTO accesos (Documento, HoraEntrada) VALUES (?, datetime('now', 'localtime'))`;
-      await dbRun(sqlInsert, [documento]);
+      await db.query(
+        `
+        INSERT INTO accesos (Documento, HoraEntrada) 
+        VALUES (?, NOW())
+      `,
+        [documento]
+      );
     }
 
     res.json({ ...socio, yaIngreso });
