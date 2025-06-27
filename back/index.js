@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const app = express();
 
 const usuariosRoutes = require("./routes/usuarios");
 const sociosRoutes = require("./routes/registroSocios");
@@ -13,9 +14,6 @@ const deudasRoutes = require("./routes/deudasRoutes");
 const estadisticasRoutes = require("./routes/estadisticas");
 const estadoSocios = require("./routes/sociosRoutes");
 const cajaRoutes = require("./routes/cajaRoutes");
-
-// ✅ Aca creás la app de Express
-const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -33,7 +31,13 @@ app.use("/api/estadisticas", estadisticasRoutes);
 app.use("/api/estado_socios", estadoSocios);
 app.use("/api/caja", cajaRoutes);
 
-// ✅ El servidor escucha en el puerto 3001
+const buildPath = path.join(__dirname, "..", "front", "build");
+
+app.use(express.static(buildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
+});
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
