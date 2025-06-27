@@ -14,20 +14,27 @@ const estadisticasRoutes = require("./routes/estadisticas");
 const estadoSocios = require("./routes/sociosRoutes");
 const cajaRoutes = require("./routes/cajaRoutes");
 
-module.exports = (app) => {
-  app.use(cors());
-  app.use(express.json());
+// ✅ Aca creás la app de Express
+const app = express();
 
-  // Tus rutas:
-  app.use("/api", usuariosRoutes);
-  app.use("/api", sociosRoutes);
-  app.use("/api", registroCobrosRoutes);
-  app.use("/api/accesos", accesoSociosRoutes);
-  app.use("/api/planes", planesRoutes);
-  app.use("/api/socios", socios);
-  app.use("/api/historial", historialRoutes);
-  app.use("/api/deudas", deudasRoutes);
-  app.use("/api/estadisticas", estadisticasRoutes);
-  app.use("/api/estado_socios", estadoSocios);
-  app.use("/api/caja", cajaRoutes);
-};
+app.use(cors());
+app.use(express.json());
+
+// ✅ Todas tus rutas
+app.use("/api", usuariosRoutes);
+app.use("/api", sociosRoutes);
+app.use("/api", registroCobrosRoutes);
+app.use("/api/accesos", accesoSociosRoutes);
+app.use("/api/planes", planesRoutes);
+app.use("/api/socios", socios);
+app.use("/api/historial", historialRoutes);
+app.use("/api/deudas", deudasRoutes);
+app.use("/api/estadisticas", estadisticasRoutes);
+app.use("/api/estado_socios", estadoSocios);
+app.use("/api/caja", cajaRoutes);
+
+// ✅ El servidor escucha en el puerto 3001
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+});
