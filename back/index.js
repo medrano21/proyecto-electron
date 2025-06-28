@@ -31,12 +31,11 @@ app.use("/api/estadisticas", estadisticasRoutes);
 app.use("/api/estado_socios", estadoSocios);
 app.use("/api/caja", cajaRoutes);
 
-const buildPath = path.join(__dirname, "..", "front", "dist");
-
-app.use(express.static(path.join(__dirname, "public")));
+const buildPath = path.join(__dirname, "public");
+app.use(express.static(buildPath));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 const PORT = 3001;
