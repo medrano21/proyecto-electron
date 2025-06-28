@@ -33,10 +33,10 @@ app.use("/api/caja", cajaRoutes);
 
 const buildPath = path.join(__dirname, "..", "front", "dist");
 
-app.use(express.static(buildPath));
+app.use(express.static(path.join(__dirname, "../front/dist")));
 
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../front/dist/index.html"));
 });
 const PORT = 3001;
 app.listen(PORT, () => {
