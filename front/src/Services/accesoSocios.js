@@ -1,6 +1,8 @@
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export const buscarSocio = async (documento) => {
   try {
-    const response = await fetch("http://localhost:3001/api/accesos/buscar", {
+    const response = await fetch(`${API_URL}/api/accesos/buscar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
