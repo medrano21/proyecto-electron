@@ -1,23 +1,23 @@
-# Ignorar dependencias
+
 /back/node_modules/
-# Si tenés frontend
+
 /front/node_modules/
 
-# Archivos de build de Electron
+
 dist_electron/
 *.exe
 *.zip
 
-# Archivos de log y temporales
+
 *.log
 .DS_Store
 Thumbs.db
 
-# Archivos de entorno y base de datos
+
 .env
 *.sqlite
 *.db
 
-# Carpetas del sistema o IDEs
+
 .vscode/
 .idea/

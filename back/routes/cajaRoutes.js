@@ -1,3 +1,4 @@
+// routes/cajaRoutes.js
 const express = require("express");
 const router = express.Router();
 const cajaController = require("../controllers/cajaControllers");
