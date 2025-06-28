@@ -3,9 +3,7 @@ node_modules/
 back/node_modules/
 front/node_modules/
 
-# Builds de Electron
-dist/
-dist_electron/
+
 *.exe
 *.zip
 
