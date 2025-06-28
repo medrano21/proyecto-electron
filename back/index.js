@@ -33,11 +33,13 @@ app.use("/api/caja", cajaRoutes);
 
 const buildPath = path.join(__dirname, "..", "front", "dist");
 
-app.use(express.static(path.join(__dirname, "../front/dist")));
+app.use(express.static(path.join(__dirname, "public")));
 
+// Fallback para SPA (React Router)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../front/dist/index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);

@@ -22,3 +22,11 @@ Thumbs.db
 
 .vscode/
 .idea/
+# Ignorar node_modules en ambos
+node_modules/
+.env
+
+# Ignorar build temporal de React (solo si no se copia a public)
+front/build/
+front/dist/
+
