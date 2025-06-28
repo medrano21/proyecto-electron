@@ -7,7 +7,7 @@ const {
 } = require("../controllers/socios");
 
 router.get("/", obtenerSocios);
-router.delete("/:id", eliminarSocio);
 router.get("/buscar", buscarSocios);
+router.delete("/:id", eliminarSocio);
 
 module.exports = router;

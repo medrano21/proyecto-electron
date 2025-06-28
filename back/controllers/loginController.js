@@ -1,4 +1,4 @@
-const db = require("../config/db"); // Esto importa db.promise()
+const db = require("../config/db");
 
 exports.login = async (req, res) => {
   const { usuario, pass } = req.body;
