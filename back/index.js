@@ -31,7 +31,8 @@ app.use("/api/estadisticas", estadisticasRoutes);
 app.use("/api/estado_socios", estadoSocios);
 app.use("/api/caja", cajaRoutes);
 
-const buildPath = path.join(__dirname, "public");
+const buildPath = path.join(__dirname, "../front/dist");
+
 app.use(express.static(buildPath));
 
 app.get("*", (req, res) => {
