@@ -3,7 +3,8 @@
 
 /front/node_modules/
 
-
+/dist
+/build
 dist_electron/
 *.exe
 *.zip
