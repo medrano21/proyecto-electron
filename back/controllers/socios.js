@@ -3,13 +3,23 @@ const db = require("../config/db"); // instancia de mysql2/promise
 const obtenerSocios = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT 
-        s.*, 
-        p.Descripcion AS Plan 
-      FROM 
-        socios s
-      LEFT JOIN 
-        planes p ON s.id_plan = p.id_plan
+      SELECT  
+  s.Documento,
+  s.Apellido,
+  s.Nombre,
+  s.FechaNac,
+  s.Domicilio,
+  s.Localidad,
+  s.Telefono,
+  s.TelefonoUrgencia,
+  s.Info,
+  s.Alergia,
+  s.Medicacion,
+  p.Descripcion AS Plan
+FROM 
+  socios s
+LEFT JOIN 
+  planes p ON s.id_plan = p.id_plan;
     `);
     res.json(rows);
   } catch (error) {

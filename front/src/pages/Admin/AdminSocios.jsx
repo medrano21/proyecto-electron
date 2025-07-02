@@ -15,8 +15,24 @@ const AdminSocios = () => {
         { header: "Nombre", accessor: "Nombre" },
         { header: "Apellido", accessor: "Apellido" },
         { header: "Documento", accessor: "Documento" },
+        { header: "Fecha Nac", accessor: "FechaNac" },
+        { header: "Domicilio", accessor: "Domicilio" },
+        { header: "Localidad", accessor: "Localidad" },
+        { header: "Telefono", accessor: "Telefono" },
+        { header: "Tel Urgencia", accessor: "TelefonoUrgencia" },
+        { header: "Info", accessor: "Info" },
+        { header: "Alergia", accessor: "Alergia" },
+        { header: "Medicacion", accessor: "Medicacion" },
         { header: "Plan", accessor: "Plan" },
     ];
+    const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+        const fecha = new Date(fechaISO);
+        const dia = String(fecha.getDate()).padStart(2, "0");
+        const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+        const año = fecha.getFullYear();
+        return `${dia}/${mes}/${año}`;
+    };
 
     const acciones = [
         {
@@ -38,13 +54,19 @@ const AdminSocios = () => {
     const cargarSocios = async () => {
         try {
             const data = await obtenerSocios();
-            console.log("👀 Socios cargados:", data); // <-- Agregá esto
-            setSocios(data);
-            setTodosLosSocios(data);
+
+            const dataFormateada = data.map((s) => ({
+                ...s,
+                FechaNac: formatearFecha(s.FechaNac),
+            }));
+
+            setSocios(dataFormateada);
+            setTodosLosSocios(dataFormateada);
         } catch (error) {
             console.error(error);
         }
     };
+
 
 
     useEffect(() => {
