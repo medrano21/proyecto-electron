@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import "./Modal.css"
-const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
+const Modal = ({ isOpen, onClose, title, children, height, size = "md" }) => {
   const sizes = {
     sm: "400px",
     md: "600px",
@@ -20,7 +20,11 @@ const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-container" style={{ maxWidth: sizes[size] }}>
+      <div
+        className="modal-container"
+        style={{ maxWidth: sizes[size], maxHeight: height || "90vh" }}
+      >
+
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
           <button className="modal-close" onClick={onClose}>&times;</button>

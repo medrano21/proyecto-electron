@@ -8,8 +8,9 @@
 
 .search-input {
   width: 200%;
+  font-size: 22px;
+  font-weight: bold;
   padding: 0.75rem 1rem;
-  font-size: 1rem;
   border-radius: 0.75rem;
   border: 2px solid #ccc;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -18,8 +19,8 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #ff0000;
-  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+  border-color: red;
+  box-shadow: 0 0 0 3px red;
 }
 
 .results-container {
@@ -32,17 +33,17 @@
   color: #ffffff;
   padding: 2rem 1rem;
   background-color: transparent;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .empty-state-icons {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
   color: #d1d5db;
 }
 
 .socio-card {
-  background: #f9fafb;
+  background: #ffffff;
   border-radius: 1rem;
   padding: 2rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
@@ -55,15 +56,23 @@
 }
 
 .socio-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   margin-top: 1.5rem;
+  align-items: center; /* centra los elementos hijos */
+  text-align: center; /* centra el texto */
+}
+
+.socio-card h3 {
+  font-size: 3rem;
+  margin-top: 0;
+  text-align: center; /* centra el nombre */
 }
 
 .socio-info p {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: #2c3036;
 }
 
@@ -112,6 +121,28 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
+}
+
+.modal-acceso-container {
+  max-width: 900px; /* Antes seguro tenía 600-700px, ahora más ancho */
+  margin: 0 auto;
+}
+
+.socio-card h3 {
+  font-size: 3rem; /* más grande el nombre */
+}
+
+.socio-info p {
+  font-size: 2rem; /* agrandamos info */
+  font-family: none;
+}
+
+.search-input {
+  font-size: 30px; /* ligeramente más grande */
+}
+
+.error-message {
+  font-size: 2rem;
 }
 
 @keyframes fadeIn {

@@ -57,9 +57,15 @@ exports.insertarMovimiento = async (req, res) => {
 exports.obtenerMovimientos = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT * FROM caja 
-      WHERE tipo_movimiento = 'COBRO' OR tipo_movimiento = 'PAGO_DEUDA'
-      ORDER BY fecha DESC, hora DESC
+      SELECT 
+    id_caja, 
+    detalle, 
+    haber, 
+    DATE_FORMAT(fecha, '%Y-%m-%d') as fecha
+FROM caja 
+WHERE tipo_movimiento = 'COBRO' OR tipo_movimiento = 'PAGO_DEUDA'
+ORDER BY fecha DESC, hora DESC
+
     `);
     res.json(rows);
   } catch (err) {

@@ -107,7 +107,7 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
     }, [isOpen]);
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="" size="md">
+        <Modal isOpen={isOpen} onClose={onClose} title="" size="xl">
             <div className="modal-acceso-container">
                 <div className="search-container">
                     <div className="flex items-center gap-2">
@@ -131,9 +131,7 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
                             >
                                 Buscar
                             </Button>
-
                         </div>
-
                     </div>
                 </div>
 
@@ -147,21 +145,29 @@ const ModalsAcceso = ({ isOpen, onClose }) => {
                         </div>
                     ) : (
                         <div className="socio-card">
-                            <h3 className="text-xl font-bold mb-4">{socio.Nombre} {socio.Apellido}</h3>
-                            <div className="socio-info">
-                                <p><strong>Plan:</strong> {socio.Plan}</p>
-                                <p><strong>Vencimiento:</strong> {socio.vencimiento}</p>
-                                <p><strong>Hora de Entrada:</strong> {new Date(socio.horaEntrada).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <h3>{socio.Nombre} {socio.Apellido}</h3>
 
-                                <p><strong>Estado:</strong> <span className={getEstadoClass(socio.estado)}>{socio.estado}</span></p>
-                                <p><strong>Ya ingresó hoy:</strong> {socio.yaIngreso ? "Sí" : "No"}</p>
+                            <div className="socio-info">
+                                <p><strong>Vencimiento:</strong> {socio.vencimiento}</p>
+                                <p>
+                                    <strong>Estado:</strong>{" "}
+                                    <span className={getEstadoClass(socio.estado)}>{socio.estado}</span>
+                                </p>
+
+                                <div style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                                    <p><strong>Plan:</strong> {socio.Plan}</p>
+                                    <p><strong>Hora de Entrada:</strong> {new Date(socio.horaEntrada).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                    <p><strong>Ya ingresó hoy:</strong> {socio.yaIngreso ? "Sí" : "No"}</p>
+                                </div>
                             </div>
                         </div>
+
                     )}
                 </div>
             </div>
         </Modal>
     );
+
 };
 
 export default ModalsAcceso;

@@ -41,8 +41,12 @@ const CajaPage = () => {
         let filtrados = [...todos];
 
         if (fechaFiltro) {
-            filtrados = filtrados.filter(mov => mov.fecha === fechaFiltro);
+            filtrados = filtrados.filter(mov => {
+                const fechaMov = new Date(mov.fecha).toISOString().split("T")[0]; // extrae 'YYYY-MM-DD'
+                return fechaMov === fechaFiltro;
+            });
         }
+
 
         if (mesFiltro) {
             filtrados = filtrados.filter(mov => mov.fecha.startsWith(mesFiltro));

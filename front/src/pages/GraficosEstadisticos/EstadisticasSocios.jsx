@@ -84,14 +84,14 @@ const EstadisticasSocios = () => {
         {/* Altas por Mes */}
         <section className="chart-card">
           <h3>Altas por Mes</h3>
-          <LineChart width={250} height={280} data={mensualData}>
+          <BarChart width={300} height={280} data={mensualData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="mes" tick={{ fontSize: 12, fill: '#ccc' }} />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="cantidad" stroke="#8884d8" strokeWidth={3} dot={{ r: 4 }} />
-          </LineChart>
+            <Bar dataKey="cantidad" fill="#8884d8" radius={[10, 10, 0, 0]} />
+          </BarChart>
         </section>
       </div>
     </Layout>
