@@ -5,23 +5,6 @@ export const obtenerSocios = async () => {
   if (!response.ok) throw new Error("Error al obtener los socios");
   return await response.json();
 };
-export const editarSocio = async (id, socioEditado) => {
-  try {
-    const response = await fetch(`http://localhost:3001/api/socios/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(socioEditado),
-    });
-
-    if (!response.ok) throw new Error("Error al editar el socio");
-
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const eliminarSocio = async (id) => {
   const response = await fetch(`${API_URL}/api/socios/${id}`, {

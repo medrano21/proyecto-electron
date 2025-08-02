@@ -4,6 +4,7 @@ const obtenerSocios = async (req, res) => {
   try {
     const [rows] = await db.query(`
       SELECT  
+  s.id_socio,
   s.Documento,
   s.Apellido,
   s.Nombre,
@@ -20,6 +21,7 @@ FROM
   socios s
 LEFT JOIN 
   planes p ON s.id_plan = p.id_plan;
+
     `);
     res.json(rows);
   } catch (error) {

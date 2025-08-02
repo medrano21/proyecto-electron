@@ -38,6 +38,7 @@ const AdminSocios = () => {
         {
             label: "Eliminar",
             onClick: async (socio) => {
+                console.log("Socio a eliminar:", socio); // Ver esto
                 if (window.confirm(`¿Eliminar al socio ${socio.Nombre} ${socio.Apellido}?`)) {
                     try {
                         await eliminarSocio(socio.id_socio);
@@ -50,6 +51,7 @@ const AdminSocios = () => {
             },
         },
     ];
+
 
     const cargarSocios = async () => {
         try {
